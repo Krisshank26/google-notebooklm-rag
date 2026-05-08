@@ -76,12 +76,12 @@ app.post("/api/upload", upload.single("document" ), async (req, res )=>
         } 
         else 
         { 
-            res.status(415 ).send("File type is not supported here " ) 
+            res.status(415 ).send({message: "File type is not supported here " } ) 
         } 
     } catch (error ) 
     { 
         console.log(error ) 
-        res.status(500 ).send("Internal Server Error Here: "+ error ) 
+        res.status(500 ).send({message: "Internal Server Error Here: "+ error } ) 
     } 
 } ) 
 
@@ -96,7 +96,7 @@ app.get("/api/query", async (req, res )=>
 
     } catch (error ) 
     { 
-        res.status(500 ).send("Internal Server Error Here: "+ error ) 
+        res.status(500 ).send({message: "Internal Server Error Here: "+ error } ) 
     } 
 } ) 
 
@@ -107,60 +107,76 @@ const embeddings= new GoogleGenerativeAIEmbeddings({
 
 async function indexing(docs ) 
 { 
-    const vectorStore= await QdrantVectorStore.fromDocuments(docs, embeddings, { 
-        url: process.env.QDRANT_URL, 
-        apiKey: process.env.QDRANT_API_KEY, 
-        collectionName: collectionName 
-    } ) 
+    try { 
+        const vectorStore= await QdrantVectorStore.fromDocuments(docs, embeddings, { 
+            url: process.env.QDRANT_URL, 
+            apiKey: process.env.QDRANT_API_KEY, 
+            collectionName: collectionName 
+        } ) 
 
-    console.log("Indexing is Completed "+ vectorStore ) 
+        console.log("Indexing is Completed "+ vectorStore ) 
 
-    /* await retrieval() */ 
+        /* await retrieval() */ 
+    } catch (error ) 
+    { 
+        console.log("Internal Server Error: "+ error ) 
+        throw new Error("Internal Server Error: "+ error ) 
+    } 
 } 
 
 async function retrieval(userQuery ) 
 { 
-    const vectorStore= await QdrantVectorStore.fromExistingCollection(embeddings, { 
-        url: process.env.QDRANT_URL, 
-        apiKey: process.env.QDRANT_API_KEY, 
-        collectionName: collectionName 
-    } ) 
+    console.log(userQuery ) 
 
-    const retrieveDocuments= vectorStore.asRetriever({ 
-        k: 3 
-    } ) 
+    try { 
+        const vectorStore= await QdrantVectorStore.fromExistingCollection(embeddings, { 
+            url: process.env.QDRANT_URL, 
+            apiKey: process.env.QDRANT_API_KEY, 
+            collectionName: collectionName 
+        } ) 
 
-    const searchedChunks= await retrieveDocuments.invoke(userQuery ) 
+        const retrieveDocuments= vectorStore.asRetriever({ 
+            k: 3 
+        } ) 
 
-    /* console.log("Searched Chunks Here: "+ searchedChunks ) */ 
+        const searchedChunks= await retrieveDocuments.invoke(userQuery ) 
 
-    const system_prompt= `You are an AI Assistant who helps resolving the user query based on the avaliable context provided to you from PDF file with the content and page number. 
-    
-    Rule : 
+        /* console.log("Searched Chunks Here: "+ searchedChunks ) */ 
 
-    - Only answer based on the avaliable context from the file only. 
+        const system_prompt= `You are an AI Assistant who helps resolving the user query based on the avaliable context provided to you from PDF file with the content and page number. 
+        
+        Rule : 
 
-    context: ${(JSON.stringify(searchedChunks ) ) } 
+        - Only answer in Plain Text File format in a structured form, and in clean way. 
 
-    ` 
+        - Only answer based on the avaliable context from the file only, and answer questions not related to file, with minimal out of context answers. 
 
-    const client= new GoogleGenAI( 
-        { 
-            apiKey: process.env.GEMINI_API_KEY, 
-        } 
-    ) 
+        context: ${(JSON.stringify(searchedChunks ) ) } 
 
-    const response= await client.models.generateContent({ 
-        model: "gemini-3-flash-preview", 
-        config: { 
-            systemInstruction: system_prompt 
-        }, 
-        contents: userQuery 
-    } ) 
+        ` 
 
-    console.log("Model has retrieved the Information from the Document Given Here " ) 
+        const client= new GoogleGenAI( 
+            { 
+                apiKey: process.env.GEMINI_API_KEY, 
+            } 
+        ) 
 
-    return response.text 
+        const response= await client.models.generateContent({ 
+            model: "gemini-3-flash-preview", 
+            config: { 
+                systemInstruction: system_prompt 
+            }, 
+            contents: userQuery 
+        } ) 
+
+        console.log("Model has retrieved the Information from the Document Given Here " ) 
+
+        return response.text 
+    } catch (error ) 
+    { 
+        console.log("Internal Server Error "+ error ) 
+        throw new Error("Internal Server Error "+ error ) 
+    } 
 } 
 
 app.listen(PORT, ()=> 

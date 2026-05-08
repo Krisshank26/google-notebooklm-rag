@@ -80,8 +80,6 @@ documentInput.addEventListener("change", () => {
 });
 
 uploadBtn.addEventListener("click", async (e ) => { 
-
-  e.preventDefault() 
   
   const file = documentInput.files && documentInput.files[0] ; 
 
@@ -110,19 +108,17 @@ uploadBtn.addEventListener("click", async (e ) => {
     uploadBtn.disabled = true;
     showUploadMessage("Uploading and processing the document on the server...", "") ; 
 
-    console.log(documentInput.files, formData ) 
-
     const response = await fetch(UPLOAD_ENDPOINT, {
       method: "POST",
       body: formData,
     }); 
 
-    console.log(response ) 
+    /* console.log(response ) */ 
 
     const data = await response.json().catch(() => null) ; 
 
-    if (!response.ok) {
-      const message = data?.message || "Upload failed.";
+    if (!response.ok) { 
+      const message = data?.message || "Upload failed." ; 
       throw new Error(message) ; 
     } 
 
