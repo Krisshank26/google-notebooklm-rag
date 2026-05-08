@@ -108,6 +108,9 @@ const embeddings= new GoogleGenerativeAIEmbeddings({
 async function indexing(docs ) 
 { 
     try { 
+
+        console.log("Documents are "+ docs ) 
+
         const vectorStore= await QdrantVectorStore.fromDocuments(docs, embeddings, { 
             url: process.env.QDRANT_URL, 
             apiKey: process.env.QDRANT_API_KEY, 
