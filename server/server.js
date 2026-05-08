@@ -19,7 +19,7 @@ const app= express()
 app.use(express.json() ) 
 
 app.use(cors({ 
-    origin: "http://127.0.0.1:5500", 
+    origin: "https://google-notebooklm-rag-three.vercel.app", 
     credentials: true 
 } ) ) 
 
