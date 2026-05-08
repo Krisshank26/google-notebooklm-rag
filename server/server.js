@@ -102,7 +102,7 @@ app.get("/api/query", async (req, res )=>
 
 const embeddings= new GoogleGenerativeAIEmbeddings({ 
     apiKey: process.env.GEMINI_API_KEY, 
-    model: "gemini-embedding-2" 
+    model: "gemini-embedding-001" 
 } ) 
 
 async function indexing(docs ) 

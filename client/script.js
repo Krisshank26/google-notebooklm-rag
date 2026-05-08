@@ -1,4 +1,4 @@
-const API_BASE = "https://google-notebooklm-rag-1.onrender.com/api"; 
+const API_BASE = "https://google-notebooklm-rag-ulzo.onrender.com" ; 
 const UPLOAD_ENDPOINT = `${API_BASE}/upload`; 
 const QUERY_ENDPOINT = `${API_BASE}/query`; 
 
@@ -83,7 +83,7 @@ uploadBtn.addEventListener("click", async (e ) => {
   
   const file = documentInput.files && documentInput.files[0] ; 
 
-  console.log(file ) 
+  /* console.log(file ) */ 
 
   if (!file) {
     showUploadMessage("Please select a document first.", "error");
