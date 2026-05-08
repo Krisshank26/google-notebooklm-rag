@@ -56,7 +56,8 @@ app.post("/api/upload", upload.single("document" ), async (req, res )=>
         } 
         else if(file.mimetype=== "text/plain" ) 
         { 
-            const textContent= fs.readFileSync(file.path ) 
+            
+            const textContent= file.buffer.toString() 
 
             const doc= new Document( 
                 { 
