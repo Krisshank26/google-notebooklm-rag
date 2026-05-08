@@ -1,5 +1,5 @@
-const API_BASE = "http://localhost:8080/api"; 
-const UPLOAD_ENDPOINT = `${API_BASE}/upload`;
+const API_BASE = "https://google-notebooklm-rag-ulzo.onrender.com/api"; 
+const UPLOAD_ENDPOINT = `${API_BASE}/upload`; 
 const QUERY_ENDPOINT = `${API_BASE}/query`; 
 
 const documentInput = document.getElementById("documentInput");
