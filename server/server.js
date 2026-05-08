@@ -38,7 +38,7 @@ app.post("/api/upload", upload.single("document" ), async (req, res )=>
     try { 
         let file= req.file 
         
-        collectionName= req.file.originalname 
+        collectionName= (Date.now().toString()+ Math.random().toString().substring(6 ) ) 
 
         if(file.mimetype=== "application/pdf" ) 
         { 
@@ -102,7 +102,7 @@ app.get("/api/query", async (req, res )=>
 
 const embeddings= new GoogleGenerativeAIEmbeddings({ 
     apiKey: process.env.GEMINI_API_KEY, 
-    model: "gemini-embedding-001" 
+    model: "gemini-embedding-2" 
 } ) 
 
 async function indexing(docs ) 
@@ -152,7 +152,7 @@ async function retrieval(userQuery )
 
         - Only answer in Plain Text File format in a structured form, and in clean way. 
 
-        - Only answer based on the avaliable context from the file only, and answer questions not related to file, with minimal out of context answers. 
+        - Only answer based on the avaliable context from the file only, and answer questions not related to file, with minimal out of context answers without headings for not file related questions. 
 
         context: ${(JSON.stringify(searchedChunks ) ) } 
 
