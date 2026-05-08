@@ -1,0 +1,21 @@
+{
+    "type":"module", 
+    "scripts": { 
+        "build": "npm install express dotenv multer cors @langchain/community @langchain/google-genai @langchain/core pdf-parse @google/genai @langchain/qdrant --force", 
+        "start": "node server/server.js" 
+    }, 
+    "dependencies": { 
+        "@google/genai":"^1.52.0", 
+        "@langchain/community":"^1.1.28", 
+        "@langchain/core":"^1.1.44", 
+        "@langchain/google-genai":"^2.1.30", 
+        "@langchain/qdrant":"^1.0.2", 
+        "@qdrant/js-client-rest":"^1.17.0", 
+        "cors":"^2.8.6", 
+        "dotenv":"^17.4.2", 
+        "express":"^5.2.1", 
+        "multer":"^2.1.1", 
+        "path":"^0.12.7", 
+        "pdf-parse":"^2.4.5" 
+    } 
+} 
