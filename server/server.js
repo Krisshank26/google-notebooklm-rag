@@ -9,7 +9,7 @@ import multer from "multer"
 import { Document } from "@langchain/core/documents" 
 /* import path from "path" */ 
 import cors from "cors" 
-import fs from "fs" 
+/* import fs from "fs" */ 
 /* import { QdrantClient } from "@qdrant/js-client-rest" */ 
 
 dotenv.config() 
@@ -57,7 +57,7 @@ app.post("/api/upload", upload.single("document" ), async (req, res )=>
         else if(file.mimetype=== "text/plain" ) 
         { 
             
-            const textContent= file.buffer.toString() 
+            const textContent= file.buffer.toString("utf-8" ) 
 
             const doc= new Document( 
                 { 
@@ -71,7 +71,11 @@ app.post("/api/upload", upload.single("document" ), async (req, res )=>
                 } 
             ) 
 
-            await indexing(doc ) 
+            console.log(doc ) 
+
+            const docarr= [doc ] 
+
+            await indexing(docarr ) 
 
             res.send({message: "Document has been processed completely here " } ) 
         } 
