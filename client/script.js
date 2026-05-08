@@ -1,4 +1,4 @@
-const API_BASE = "https://google-notebooklm-rag-ulzo.onrender.com" ; 
+const API_BASE = "https://google-notebooklm-rag-ulzo.onrender.com/api" ; 
 const UPLOAD_ENDPOINT = `${API_BASE}/upload`; 
 const QUERY_ENDPOINT = `${API_BASE}/query`; 
 
