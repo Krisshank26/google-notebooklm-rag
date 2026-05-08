@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RAG Document Chat</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">NotebookLM-style Document Chat</p>
+        <h1>Upload a PDF or plain text file, then chat with it</h1>
+        <p class="subtext">
+          Only <strong>.pdf</strong> and <strong>.txt</strong> files are accepted.
+          Any other format is rejected on the client side before upload.
+        </p>
+      </div>
+      <div class="status-card">
+        <span class="status-label">Server status</span>
+        <span id="serverStatus" class="status-pill idle">Waiting</span>
+      </div>
+    </header>
+
+    <section class="panel upload-panel">
+      <div class="panel-head">
+        <h2>1. Upload document</h2>
+        <p>Send the file to the server with a POST request.</p>
+      </div>
+
+      <div class="upload-row">
+        <label class="file-picker" for="documentInput">
+          <input id="documentInput" type="file" accept=".pdf,.txt,application/pdf,text/plain" />
+          <span>Choose PDF or TXT</span>
+        </label> 
+
+        <button id="uploadBtn" class="primary-btn">Upload & Process</button>
+      </div>
+
+      <p id="fileInfo" class="file-info">No file selected.</p>
+      <p id="uploadMessage" class="message-line"></p> 
+    </section>
+
+    <section class="panel chat-panel">
+      <div class="panel-head">
+        <h2>2. Ask questions</h2>
+        <p>Each query is sent to the server with a GET request and the answer appears in chat form.</p>
+      </div>
+
+      <div id="chatBox" class="chat-box" aria-live="polite"></div>
+
+      <form id="queryForm" class="query-form">
+        <input
+          id="queryInput"
+          type="text"
+          placeholder="Ask something about the uploaded document..."
+          autocomplete="off"
+        />
+        <button id="askBtn" type="submit" class="primary-btn">Send</button>
+      </form>
+      <p class="hint">Tip: upload a document first, then ask grounded questions about it.</p>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
